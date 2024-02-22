@@ -3,7 +3,8 @@ const cors = require('cors');
 const bodyparser = require('body-parser');
 require('dotenv').config();
 
-const app  = express();
+const app = express();
+const PORT = process.env.PORT || 4242; // Use a variável de ambiente PORT ou 4242 se não estiver definida
 
 app.use(express.static('public'));
 app.use(bodyparser.urlencoded({ extended: false }));
@@ -76,8 +77,8 @@ app.post('/checkout', async (req, res, next) => {
                 quantity: item.quantity,
             })),
             mode: "payment",
-            success_url: 'http://localhost:4242/success.html',
-            cancel_url: 'http://localhost:4242/cancel.html',
+            success_url: 'http://localhost:4242/success.html' || 'https://fr3d-store-app.vercel.app/success.html',
+            cancel_url: 'http://localhost:4242/cancel.html' || 'https://fr3d-store-app.vercel.app/cancel.html',
         })
 
         res.status(200).json(session)
@@ -86,4 +87,4 @@ app.post('/checkout', async (req, res, next) => {
     }
 });
 
-app.listen(4242, () => console.log('API está funcionando na porta 4242'));
+app.listen(PORT, () => console.log(`API está funcionando na porta ${PORT}`));
