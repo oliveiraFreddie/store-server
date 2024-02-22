@@ -3,8 +3,6 @@ const cors = require('cors');
 const bodyparser = require('body-parser');
 require('dotenv').config();
 
-const BASE_API_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4242';
-const port = process.env.PORT || 4242;
 const app  = express();
 
 app.use(express.static('public'));
@@ -13,7 +11,7 @@ app.use(bodyparser.json());
 app.use(cors({ origin: true, credentials: true }));
 
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripe = require('stripe')('sk_test_51OkOltHMoqj2puA5aDjE0X6Cg3qVMJyGcYNax0t7FWtxQRG6AmyCEDllwLgBnvJU4EYzS3Qh6Ktt3y3aMdsPbNS300Zfo8tkfC');
 
 app.post('/checkout', async (req, res, next) => {
     try {
@@ -78,8 +76,8 @@ app.post('/checkout', async (req, res, next) => {
                 quantity: item.quantity,
             })),
             mode: "payment",
-            success_url: `${BASE_API_URL}/success.html`,
-            cancel_url: `${BASE_API_URL}/cancel.html`,
+            success_url: 'http://localhost:4242/success.html',
+            cancel_url: 'http://localhost:4242/cancel.html',
         })
 
         res.status(200).json(session)
@@ -88,4 +86,4 @@ app.post('/checkout', async (req, res, next) => {
     }
 });
 
-app.listen(port, () => console.log(`api is running on port: ${port}`));
+app.listen(4242, () => console.log('API está funcionando na porta 4242'));
