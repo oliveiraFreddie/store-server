@@ -1,15 +1,21 @@
 const express = require('express');
 const cors = require('cors');
 const bodyparser = require('body-parser');
+const compression = require('compression');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 4242; // Use a variável de ambiente PORT ou 4242 se não estiver definida
 
+app.use(compression());
 app.use(express.static('public'));
-app.use(bodyparser.urlencoded({ extended: false }));
-app.use(bodyparser.json());
-app.use(cors({ origin: true, credentials: true }));
+app.use(bodyparser.urlencoded({ extended: false, limit: '1mb' }));
+app.use(bodyparser.json({ limit: '1mb' }));
+app.use(cors({
+    origin: ['http://localhost:3000', 'https://fr3d-store-app.vercel.app'],
+    credentials: true,
+}));
+
 
 
 const stripe = require('stripe')('sk_test_51OkOltHMoqj2puA5aDjE0X6Cg3qVMJyGcYNax0t7FWtxQRG6AmyCEDllwLgBnvJU4EYzS3Qh6Ktt3y3aMdsPbNS300Zfo8tkfC');
